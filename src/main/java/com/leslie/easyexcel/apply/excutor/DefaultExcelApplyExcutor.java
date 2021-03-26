@@ -1,7 +1,10 @@
-package com.leslie.easyexcel.apply;
+package com.leslie.easyexcel.apply.excutor;
 
 
+import com.leslie.easyexcel.apply.ExcelApplier;
 import com.leslie.easyexcel.apply.context.ApplyContext;
+import com.leslie.easyexcel.apply.handler.ExcelApplyHandler;
+import com.leslie.easyexcel.apply.handler.ExcelApplyHandlerImpl;
 import com.leslie.easyexcel.apply.loader.ApplyContextLoader;
 
 /**
@@ -10,12 +13,13 @@ import com.leslie.easyexcel.apply.loader.ApplyContextLoader;
  */
 public class DefaultExcelApplyExcutor<T> implements ExcelApplyExecutor<T> {
 
-    private final ApplyContextLoader contextLoader;
+    protected final ApplyContextLoader contextLoader;
 
-    private ExcelApplyHandler handler = new ExcelApplyHandlerImpl();
+    protected final ExcelApplyHandler handler;
 
     public DefaultExcelApplyExcutor(ApplyContextLoader contextLoader) {
         this.contextLoader = contextLoader;
+        this.handler = new ExcelApplyHandlerImpl();
     }
 
     public DefaultExcelApplyExcutor(ExcelApplyHandler handler, ApplyContextLoader contextLoader) {
