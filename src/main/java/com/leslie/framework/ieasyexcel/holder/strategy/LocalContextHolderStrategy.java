@@ -1,7 +1,8 @@
 package com.leslie.framework.ieasyexcel.holder.strategy;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
  */
 public class LocalContextHolderStrategy<K, V> implements ContextHolderStrategy<K, V> {
 
-    private static Cache<Object, Object> cache;
+    private static Cache<@NonNull Object, @NonNull Object> cache;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -23,7 +24,7 @@ public class LocalContextHolderStrategy<K, V> implements ContextHolderStrategy<K
     @Override
     public void setContext(K key, V context) {
         if (cache == null) {
-            cache = CacheBuilder.newBuilder()
+            cache = Caffeine.newBuilder()
                     .expireAfterAccess(Duration.ofMinutes(5))
                     .build();
         }
