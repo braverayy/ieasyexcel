@@ -1,5 +1,7 @@
 package com.leslie.framework.ieasyexcel.read.context;
 
+import com.leslie.framework.ieasyexcel.holder.strategy.ContextHolderStrategy;
+import com.leslie.framework.ieasyexcel.holder.strategy.LocalContextHolderStrategy;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -12,30 +14,32 @@ import java.util.Optional;
  */
 public class ReadContextHolder {
 
-    public static final String MODE_GLOBAL = "READ_MODE_GLOBAL";
-    public static final String SYSTEM_PROPERTY = "easyexcel.read.strategy";
+    private static ContextHolderStrategy<String, ReadContext> strategy;
+
+    public static final String MODE_LOCAL = "READ_MODE_LOCAL";
+    public static final String SYSTEM_PROPERTY = "ieasyexcel.read.strategy";
     private static String strategyName = System.getProperty(SYSTEM_PROPERTY);
-    private static ReadContextHolderStrategy strategy;
     private static int initializeCount = 0;
 
     static {
         initialize();
     }
 
+    @SuppressWarnings("unchecked")
     private static void initialize() {
         if (!StringUtils.hasText(strategyName)) {
             // Set default
-            strategyName = MODE_GLOBAL;
+            strategyName = MODE_LOCAL;
         }
 
-        if (strategyName.equals(MODE_GLOBAL)) {
-            strategy = new GlobalReadContextHolderStrategy();
+        if (strategyName.equals(MODE_LOCAL)) {
+            strategy = new LocalContextHolderStrategy<>();
         } else {
             // Try to load a custom strategy
             try {
                 Class<?> clazz = Class.forName(strategyName);
                 Constructor<?> customStrategy = clazz.getConstructor();
-                strategy = (ReadContextHolderStrategy) customStrategy.newInstance();
+                strategy = (ContextHolderStrategy<String, ReadContext>) customStrategy.newInstance();
             } catch (Exception ex) {
                 ReflectionUtils.handleReflectionException(ex);
             }
@@ -61,7 +65,7 @@ public class ReadContextHolder {
         initialize();
     }
 
-    public static ReadContextHolderStrategy getContextHolderStrategy() {
+    public static ContextHolderStrategy<String, ReadContext> getContextHolderStrategy() {
         return strategy;
     }
 
