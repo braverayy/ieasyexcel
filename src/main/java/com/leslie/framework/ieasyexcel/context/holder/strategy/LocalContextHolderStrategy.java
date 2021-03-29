@@ -12,18 +12,18 @@ import java.util.Optional;
  * @author leslie
  * @date 2021/3/28
  */
-public class LocalContextHolderStrategy<K, V extends Context> implements ContextHolderStrategy<K, V> {
+public class LocalContextHolderStrategy<V extends Context> implements ContextHolderStrategy<String, V> {
 
-    private static Cache<@NonNull Object, @NonNull Object> cache;
+    private static Cache<@NonNull String, @NonNull Context> cache;
 
     @SuppressWarnings("unchecked")
     @Override
-    public Optional<V> getContext(K key) {
+    public Optional<V> getContext(String key) {
         return Optional.ofNullable((V) cache.getIfPresent(key));
     }
 
     @Override
-    public void setContext(K key, V context) {
+    public void setContext(String key, V context) {
         if (cache == null) {
             cache = Caffeine.newBuilder()
                     .expireAfterWrite(Duration.ofMinutes(5))
@@ -33,7 +33,7 @@ public class LocalContextHolderStrategy<K, V extends Context> implements Context
     }
 
     @Override
-    public void clearContext(K key) {
+    public void clearContext(String key) {
         cache.invalidate(key);
     }
 }
