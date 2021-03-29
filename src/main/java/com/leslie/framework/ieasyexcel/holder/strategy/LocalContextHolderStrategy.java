@@ -25,7 +25,7 @@ public class LocalContextHolderStrategy<K, V> implements ContextHolderStrategy<K
     public void setContext(K key, V context) {
         if (cache == null) {
             cache = Caffeine.newBuilder()
-                    .expireAfterAccess(Duration.ofMinutes(5))
+                    .expireAfterWrite(Duration.ofMinutes(5))
                     .build();
         }
         cache.put(key, context);

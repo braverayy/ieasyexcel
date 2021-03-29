@@ -14,19 +14,22 @@ import java.util.Optional;
  * @author leslie
  * @date 2021/3/28
  */
-public class ContextHolder {
+public class ExcelContextHolder {
 
     public static class READ {
+
+        public static final String KEY_PREFIX = "READ.";
+
         public static void clearContext(String key) {
-            ReadContextHolder.clearContext(key);
+            ReadContextHolder.clearContext(KEY_PREFIX + key);
         }
 
         public static Optional<ReadContext> getContext(String key) {
-            return ReadContextHolder.getContext(key);
+            return ReadContextHolder.getContext(KEY_PREFIX + key);
         }
 
         public static void setContext(String key, ReadContext context) {
-            ReadContextHolder.setContext(key, context);
+            ReadContextHolder.setContext(KEY_PREFIX + key, context);
         }
 
         public static void setStrategyName(String strategyName) {
@@ -44,16 +47,18 @@ public class ContextHolder {
 
     public static class APPLY {
 
+        public static final String KEY_PREFIX = "APPLY.";
+
         public static void clearContext(String key) {
-            ApplyContextHolder.clearContext(key);
+            ApplyContextHolder.clearContext(KEY_PREFIX + key);
         }
 
         public static Optional<ApplyContext> getContext(String key) {
-            return ApplyContextHolder.getContext(key);
+            return ApplyContextHolder.getContext(KEY_PREFIX + key);
         }
 
         public static void setContext(String key, ApplyContext context) {
-            ApplyContextHolder.setContext(key, context);
+            ApplyContextHolder.setContext(KEY_PREFIX + key, context);
         }
 
         public static void setStrategyName(String strategyName) {
