@@ -1,7 +1,7 @@
 package com.leslie.framework.ieasyexcel.apply.context;
 
-import com.leslie.framework.ieasyexcel.holder.strategy.ContextHolderStrategy;
-import com.leslie.framework.ieasyexcel.holder.strategy.LocalContextHolderStrategy;
+import com.leslie.framework.ieasyexcel.context.holder.strategy.ContextHolderStrategy;
+import com.leslie.framework.ieasyexcel.context.holder.strategy.LocalContextHolderStrategy;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 

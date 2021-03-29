@@ -1,5 +1,6 @@
 package com.leslie.framework.ieasyexcel.read.context;
 
+import com.leslie.framework.ieasyexcel.context.Context;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +13,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-public class ReadContext {
+@EqualsAndHashCode(callSuper = false)
+public class ReadContext extends Context {
 
     private Integer sheetNo;
 

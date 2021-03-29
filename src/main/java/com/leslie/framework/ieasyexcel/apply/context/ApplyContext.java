@@ -1,5 +1,6 @@
 package com.leslie.framework.ieasyexcel.apply.context;
 
+import com.leslie.framework.ieasyexcel.context.Context;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +16,8 @@ import java.math.RoundingMode;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-public class ApplyContext {
+@EqualsAndHashCode(callSuper = false)
+public class ApplyContext extends Context {
 
     private Object currentData;
 

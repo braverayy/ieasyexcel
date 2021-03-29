@@ -1,7 +1,8 @@
-package com.leslie.framework.ieasyexcel.holder.strategy;
+package com.leslie.framework.ieasyexcel.context.holder.strategy;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.leslie.framework.ieasyexcel.context.Context;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Duration;
@@ -11,7 +12,7 @@ import java.util.Optional;
  * @author leslie
  * @date 2021/3/28
  */
-public class LocalContextHolderStrategy<K, V> implements ContextHolderStrategy<K, V> {
+public class LocalContextHolderStrategy<K, V extends Context> implements ContextHolderStrategy<K, V> {
 
     private static Cache<@NonNull Object, @NonNull Object> cache;
 
