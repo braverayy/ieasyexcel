@@ -61,13 +61,14 @@ class ExcelApplierTest {
         ApplyContextLoader pageLoader = new ApplyContextPageLoaderAdapter<>(
                 2, pageable -> excelReadDataRepository.find(excelReadRecord, pageable));
 
+        ExcelApplyExecutor<ExcelReadData> executor = new DefaultExcelApplyExecutor<>(pageLoader);
+
         new Thread(() -> {
             while (true) {
                 ExcelContextHolder.APPLY.getContext(key).ifPresent(System.out::println);
             }
         }).start();
 
-        ExcelApplyExecutor<ExcelReadData> executor = new DefaultExcelApplyExecutor<>(pageLoader);
         executor.execute(key, (excelReadData, context) -> System.out.println(excelReadData));
     }
 }
