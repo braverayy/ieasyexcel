@@ -43,6 +43,7 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
 
     @Override
     public void invoke(T data, AnalysisContext context) {
+        super.invoke(data, context);
         log.info("解析数据: {}", JSON.toJSONString(data));
 
         ExcelReadValidation validation = new ExcelReadValidation();
@@ -59,7 +60,6 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
         if (dataCache.size() >= excelReadFlowControl.getBatchCount()) {
             excelReader.read(dataCache, context);
             dataCache.clear();
-            super.invoke(data, context);
         }
     }
 

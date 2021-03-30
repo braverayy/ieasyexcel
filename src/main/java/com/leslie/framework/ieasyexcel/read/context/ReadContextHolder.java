@@ -16,6 +16,7 @@ public class ReadContextHolder {
 
     private static ContextHolderStrategy<String, ReadContext> strategy;
 
+    public static final String KEY_PREFIX = "READ.";
     public static final String MODE_LOCAL = "READ_MODE_LOCAL";
     public static final String SYSTEM_PROPERTY = "ieasyexcel.read.strategy";
     private static String strategyName = System.getProperty(SYSTEM_PROPERTY);
@@ -49,15 +50,15 @@ public class ReadContextHolder {
     }
 
     public static void clearContext(String key) {
-        strategy.clearContext(key);
+        strategy.clearContext(KEY_PREFIX + key);
     }
 
     public static Optional<ReadContext> getContext(String key) {
-        return strategy.getContext(key);
+        return strategy.getContext(KEY_PREFIX + key);
     }
 
     public static void setContext(String key, ReadContext context) {
-        strategy.setContext(key, context);
+        strategy.setContext(KEY_PREFIX + key, context);
     }
 
     public static void setStrategyName(String strategyName) {

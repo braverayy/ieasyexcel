@@ -1,8 +1,11 @@
 package com.leslie.framework.ieasyexcel.context.holder;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.leslie.framework.ieasyexcel.apply.context.ApplyContext;
 import com.leslie.framework.ieasyexcel.apply.context.ApplyContextHolder;
+import com.leslie.framework.ieasyexcel.context.Context;
 import com.leslie.framework.ieasyexcel.context.holder.strategy.ContextHolderStrategy;
+import com.leslie.framework.ieasyexcel.context.holder.strategy.LocalContextHolderStrategy;
 import com.leslie.framework.ieasyexcel.read.context.ReadContext;
 import com.leslie.framework.ieasyexcel.read.context.ReadContextHolder;
 
@@ -16,20 +19,25 @@ import java.util.Optional;
  */
 public class ExcelContextHolder {
 
+    /**
+     * In most cases, you only need to call this method once in the system
+     */
+    public static void setLocalCache(Cache<String, Context> localCache) {
+        LocalContextHolderStrategy.cache = localCache;
+    }
+
     public static class READ {
 
-        public static final String KEY_PREFIX = "READ.";
-
         public static void clearContext(String key) {
-            ReadContextHolder.clearContext(KEY_PREFIX + key);
+            ReadContextHolder.clearContext(key);
         }
 
         public static Optional<ReadContext> getContext(String key) {
-            return ReadContextHolder.getContext(KEY_PREFIX + key);
+            return ReadContextHolder.getContext(key);
         }
 
         public static void setContext(String key, ReadContext context) {
-            ReadContextHolder.setContext(KEY_PREFIX + key, context);
+            ReadContextHolder.setContext(key, context);
         }
 
         public static void setStrategyName(String strategyName) {
@@ -47,18 +55,16 @@ public class ExcelContextHolder {
 
     public static class APPLY {
 
-        public static final String KEY_PREFIX = "APPLY.";
-
         public static void clearContext(String key) {
-            ApplyContextHolder.clearContext(KEY_PREFIX + key);
+            ApplyContextHolder.clearContext(key);
         }
 
         public static Optional<ApplyContext> getContext(String key) {
-            return ApplyContextHolder.getContext(KEY_PREFIX + key);
+            return ApplyContextHolder.getContext(key);
         }
 
         public static void setContext(String key, ApplyContext context) {
-            ApplyContextHolder.setContext(KEY_PREFIX + key, context);
+            ApplyContextHolder.setContext(key, context);
         }
 
         public static void setStrategyName(String strategyName) {

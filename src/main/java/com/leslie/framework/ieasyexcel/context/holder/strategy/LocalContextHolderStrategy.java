@@ -14,12 +14,12 @@ import java.util.Optional;
  */
 public class LocalContextHolderStrategy<V extends Context> implements ContextHolderStrategy<String, V> {
 
-    private static Cache<@NonNull String, @NonNull Context> cache;
+    public static Cache<@NonNull String, @NonNull Context> cache;
 
     @SuppressWarnings("unchecked")
     @Override
     public Optional<V> getContext(String key) {
-        return Optional.ofNullable((V) cache.getIfPresent(key));
+        return cache == null ? Optional.empty() : Optional.ofNullable((V) cache.getIfPresent(key));
     }
 
     @Override

@@ -16,6 +16,7 @@ public class ApplyContextHolder {
 
     private static ContextHolderStrategy<String, ApplyContext> strategy;
 
+    public static final String KEY_PREFIX = "APPLY.";
     public static final String MODE_LOCAL = "APPLY_MODE_LOCAL";
     public static final String SYSTEM_PROPERTY = "ieasyexcel.apply.strategy";
     private static String strategyName = System.getProperty(SYSTEM_PROPERTY);
@@ -49,15 +50,15 @@ public class ApplyContextHolder {
     }
 
     public static void clearContext(String key) {
-        strategy.clearContext(key);
+        strategy.clearContext(KEY_PREFIX + key);
     }
 
     public static Optional<ApplyContext> getContext(String key) {
-        return strategy.getContext(key);
+        return strategy.getContext(KEY_PREFIX + key);
     }
 
     public static void setContext(String key, ApplyContext context) {
-        strategy.setContext(key, context);
+        strategy.setContext(KEY_PREFIX + key, context);
     }
 
     public static void setStrategyName(String strategyName) {

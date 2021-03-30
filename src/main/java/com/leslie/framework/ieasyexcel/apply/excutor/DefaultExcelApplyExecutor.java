@@ -11,18 +11,18 @@ import com.leslie.framework.ieasyexcel.apply.loader.ApplyContextLoader;
  * @author leslie
  * @date 2021/3/22
  */
-public class DefaultExcelApplyExcutor<T> implements ExcelApplyExecutor<T> {
+public class DefaultExcelApplyExecutor<T> implements ExcelApplyExecutor<T> {
 
     protected final ApplyContextLoader contextLoader;
 
     protected final ExcelApplyHandler handler;
 
-    public DefaultExcelApplyExcutor(ApplyContextLoader contextLoader) {
+    public DefaultExcelApplyExecutor(ApplyContextLoader contextLoader) {
         this.contextLoader = contextLoader;
         this.handler = new ExcelApplyHandlerImpl();
     }
 
-    public DefaultExcelApplyExcutor(ExcelApplyHandler handler, ApplyContextLoader contextLoader) {
+    public DefaultExcelApplyExecutor(ExcelApplyHandler handler, ApplyContextLoader contextLoader) {
         this.handler = handler;
         this.contextLoader = contextLoader;
     }
