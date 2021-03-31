@@ -76,7 +76,8 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
 
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-        if (excelReadFlowControl.isCheckHead()) {
+        boolean isHead = context.readSheetHolder().getHeadRowNumber() - 1 == context.readRowHolder().getRowIndex();
+        if (isHead && excelReadFlowControl.isCheckHead()) {
             log.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
 
             Map<Integer, String> predefinedHeadMap = new HashMap<>(headMap.size());
