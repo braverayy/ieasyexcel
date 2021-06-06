@@ -1,4 +1,4 @@
-package com.leslie.framework.ieasyexcel.context.holder.strategy;
+package com.leslie.framework.ieasyexcel.context.holder;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -12,7 +12,7 @@ import java.util.Optional;
  * @author leslie
  * @date 2021/3/28
  */
-public class LocalContextHolderStrategy<V extends Context> implements ContextHolderStrategy<String, V> {
+public class LocalContextHolder<V extends Context> implements ContextHolder<String, V> {
 
     public static Cache<@NonNull String, @NonNull Context> cache;
 

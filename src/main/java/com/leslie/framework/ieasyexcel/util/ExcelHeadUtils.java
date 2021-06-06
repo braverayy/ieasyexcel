@@ -15,8 +15,8 @@ public class ExcelHeadUtils {
     }
 
     public static boolean same(Map<Integer, String> predefinedHeadMap, Map<Integer, String> currentHeadMap) {
-        Objects.requireNonNull(predefinedHeadMap, "predefinedHeadMap is required");
-        Objects.requireNonNull(currentHeadMap, "currentHeadMap is required");
+        Objects.requireNonNull(predefinedHeadMap, "PredefinedHeadMap must not be null!");
+        Objects.requireNonNull(currentHeadMap, "CurrentHeadMap must not be null!");
         if (predefinedHeadMap.size() != currentHeadMap.size()) {
             return false;
         }

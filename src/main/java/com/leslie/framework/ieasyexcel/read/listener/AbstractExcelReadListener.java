@@ -4,8 +4,9 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.read.metadata.holder.ReadRowHolder;
 import com.alibaba.excel.read.metadata.holder.ReadSheetHolder;
-import com.leslie.framework.ieasyexcel.read.context.ReadContext;
-import com.leslie.framework.ieasyexcel.read.context.ReadContextHolder;
+import com.leslie.framework.ieasyexcel.context.ReadContext;
+import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
+import com.leslie.framework.ieasyexcel.context.holder.ContextHolderBuilder;
 
 /**
  * @author leslie
@@ -26,14 +27,18 @@ public abstract class AbstractExcelReadListener<T> extends AnalysisEventListener
     protected abstract String key();
 
     protected void setReadContext(AnalysisContext context) {
+        ContextHolder<String, ReadContext> readContextHolder = ContextHolderBuilder.<ReadContext>create().build();
+
         ReadRowHolder readRowHolder = context.readRowHolder();
         ReadSheetHolder readSheetHolder = context.readSheetHolder();
 
-        ReadContext readContext = new ReadContext();
-        readContext.setSheetNo(readSheetHolder.getSheetNo());
-        readContext.setSheetName(readSheetHolder.getSheetName());
-        readContext.setTotalRowNumber(readSheetHolder.getApproximateTotalRowNumber());
-        readContext.setRowIndex(readRowHolder.getRowIndex());
-        ReadContextHolder.setContext(key(), readContext);
+        ReadContext readContext = ReadContext.builder()
+                .sheetName(readSheetHolder.getSheetName())
+                .sheetNo(readSheetHolder.getSheetNo())
+                .rowTotal(readSheetHolder.getApproximateTotalRowNumber())
+                .rowIndex(readRowHolder.getRowIndex())
+                .build();
+
+        readContextHolder.setContext(key(), readContext);
     }
 }

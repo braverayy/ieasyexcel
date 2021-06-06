@@ -1,8 +1,8 @@
 package com.leslie.framework.ieasyexcel.apply.loader;
 
 
-import com.leslie.framework.ieasyexcel.apply.context.ApplyContext;
-import com.leslie.framework.ieasyexcel.apply.context.ApplyContextHolder;
+import com.leslie.framework.ieasyexcel.context.ApplyContext;
+import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -18,20 +18,27 @@ public class ApplyContextPageLoaderAdapter<T> implements ApplyContextLoader {
 
     private int pageSize = 50;
 
+    private final ContextHolder<String, ApplyContext> applyContextHolder;
+
     private final ApplyContextPageLoader<T> pageContextLoader;
 
-    public ApplyContextPageLoaderAdapter(ApplyContextPageLoader<T> pageContextLoader) {
+    public ApplyContextPageLoaderAdapter(ContextHolder<String, ApplyContext> applyContextHolder,
+                                         ApplyContextPageLoader<T> pageContextLoader) {
+        this.applyContextHolder = applyContextHolder;
         this.pageContextLoader = pageContextLoader;
     }
 
-    public ApplyContextPageLoaderAdapter(int pageSize, ApplyContextPageLoader<T> pageContextLoader) {
+    public ApplyContextPageLoaderAdapter(int pageSize,
+                                         ContextHolder<String, ApplyContext> applyContextHolder,
+                                         ApplyContextPageLoader<T> pageContextLoader) {
         this.pageSize = pageSize;
+        this.applyContextHolder = applyContextHolder;
         this.pageContextLoader = pageContextLoader;
     }
 
     @Override
     public ApplyContext next(String key) {
-        ApplyContext applyContext = ApplyContextHolder.getContext(key).orElse(null);
+        ApplyContext applyContext = applyContextHolder.getContext(key).orElse(null);
 
         if (applyContext == null) {
 
@@ -42,10 +49,10 @@ public class ApplyContextPageLoaderAdapter<T> implements ApplyContextLoader {
             applyContext.setTotal(page.getTotalElements());
             applyContext.setIndex(0L);
 
-            ApplyContextHolder.setContext(key, applyContext);
+            applyContextHolder.setContext(key, applyContext);
         } else {
 
-            long index = (long) applyContext.getIndex();
+            long index = applyContext.getIndex();
             int indexOfElements = (int) (index - (page.getNumber() * page.getSize()));
 
             List<T> content = page.getContent();

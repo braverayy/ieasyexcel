@@ -1,12 +1,12 @@
 package com.leslie.framework.ieasyexcel.read.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.exception.ExcelAnalysisException;
-import com.alibaba.fastjson.JSON;
 import com.leslie.framework.ieasyexcel.read.ExcelReader;
 import com.leslie.framework.ieasyexcel.read.metadata.ExcelReadFlowControl;
 import com.leslie.framework.ieasyexcel.read.metadata.ExcelReadValidation;
+import com.leslie.framework.ieasyexcel.support.ExcelCommonException;
 import com.leslie.framework.ieasyexcel.util.ExcelHeadUtils;
+import com.leslie.framework.ieasyexcel.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
     @Override
     public void invoke(T data, AnalysisContext context) {
         super.invoke(data, context);
-        log.info("解析数据: {}", JSON.toJSONString(data));
+        log.info("解析数据: {}", JsonUtils.toJsonString(data));
 
         ExcelReadValidation validation = new ExcelReadValidation();
         if (excelReadFlowControl.isCheckCacheRepeat() && dataCache.contains(data)) {
@@ -65,8 +65,8 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        excelReader.read(dataCache, context);
         super.doAfterAllAnalysed(context);
+        excelReader.read(dataCache, context);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
         boolean isHead = context.readSheetHolder().getHeadRowNumber() - 1 == context.readRowHolder().getRowIndex();
         if (isHead && excelReadFlowControl.isCheckHead()) {
-            log.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
+            log.info("Head data: {}", JsonUtils.toJsonString(headMap));
 
             Map<Integer, String> predefinedHeadMap = new HashMap<>(headMap.size());
             context.currentReadHolder()
@@ -87,7 +87,7 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
                     .forEach((index, head) -> predefinedHeadMap.put(index, head.getHeadNameList().get(0)));
 
             if (!ExcelHeadUtils.same(predefinedHeadMap, headMap)) {
-                throw new ExcelAnalysisException("当前Excel表头与模板不符合");
+                throw new ExcelCommonException("The Excel header does not match the template!");
             }
         }
     }
