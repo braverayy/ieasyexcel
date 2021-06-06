@@ -9,8 +9,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 public class ReadContext extends Context {
 
     private Integer sheetNo;
