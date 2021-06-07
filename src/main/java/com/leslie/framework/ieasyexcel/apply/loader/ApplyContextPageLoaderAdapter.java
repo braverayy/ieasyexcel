@@ -51,7 +51,7 @@ public class ApplyContextPageLoaderAdapter<T> implements ApplyContextLoader {
             List<T> dataList = page.getContent();
 
             // load the next data on the slice
-            if (indexOfElements <= dataList.size() - 1) {
+            if (indexOfElements < dataList.size() - 1) {
 
                 context.setIndex(index + 1);
                 context.setTotal(page.getTotalElements());

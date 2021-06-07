@@ -1,9 +1,11 @@
 package com.leslie.framework.ieasyexcel.read.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
+import com.leslie.framework.ieasyexcel.context.ReadContext;
+import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
+import com.leslie.framework.ieasyexcel.read.ExcelReadParam;
+import com.leslie.framework.ieasyexcel.read.ExcelReadValidation;
 import com.leslie.framework.ieasyexcel.read.ExcelReader;
-import com.leslie.framework.ieasyexcel.read.metadata.ExcelReadFlowControl;
-import com.leslie.framework.ieasyexcel.read.metadata.ExcelReadValidation;
 import com.leslie.framework.ieasyexcel.support.ExcelCommonException;
 import com.leslie.framework.ieasyexcel.util.ExcelHeadUtils;
 import com.leslie.framework.ieasyexcel.util.JsonUtils;
@@ -18,66 +20,71 @@ import java.util.Map;
  * @author leslie
  * @date 2021/3/22
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractExcelReadListener<T> {
 
-    protected final String key;
+    protected final ExcelReadParam readParam;
 
-    protected final ExcelReader<T> excelReader;
+    private final List<T> dataCache = new ArrayList<>();
 
-    protected final ExcelReadFlowControl excelReadFlowControl;
-
-    protected final List<T> dataCache = new ArrayList<>();
-
-    public ExcelReadListener(String key, ExcelReader<T> excelReader) {
-        this.key = key;
-        this.excelReader = excelReader;
-        this.excelReadFlowControl = ExcelReadFlowControl.builder().build();
-    }
-
-    public ExcelReadListener(String key, ExcelReader<T> excelReader, ExcelReadFlowControl excelReadFlowControl) {
-        this.key = key;
-        this.excelReader = excelReader;
-        this.excelReadFlowControl = excelReadFlowControl;
+    public ExcelReadListener(ExcelReadParam readParam) {
+        this.readParam = readParam;
     }
 
     @Override
     public void invoke(T data, AnalysisContext context) {
-        super.invoke(data, context);
-        log.info("解析数据: {}", JsonUtils.toJsonString(data));
+        log.info("Row data: {}", JsonUtils.toJsonString(data));
 
+        ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
         ExcelReadValidation validation = new ExcelReadValidation();
-        if (excelReadFlowControl.isCheckCacheRepeat() && dataCache.contains(data)) {
+
+        // pre-check
+        if (readParam.isCheckCacheRepeat() && dataCache.contains(data)) {
+
             validation.setAvailable(false);
             validation.setMsg("数据重复");
-        } else if (excelReadFlowControl.isPreCheck()) {
+
+        } else if (readParam.isPreCheck()) {
+
             validation = excelReader.check(data);
         }
         data.setAvailable(validation.getAvailable());
         data.setMsg(validation.getMsg());
 
+        // add to the cache, reach the specified number to save
         dataCache.add(data);
-        if (dataCache.size() >= excelReadFlowControl.getBatchCount()) {
-            excelReader.read(dataCache, context);
+        if (dataCache.size() >= readParam.getBatchCount()) {
+            readAndSetContext(dataCache, context);
             dataCache.clear();
         }
     }
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        super.doAfterAllAnalysed(context);
-        excelReader.read(dataCache, context);
+        readAndSetContext(dataCache, context);
+    }
+
+    protected void readAndSetContext(List<T> excelDataList, AnalysisContext context) {
+        setReadContext(context);
+        ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
+        excelReader.read(excelDataList, context);
+    }
+
+    @Override
+    protected ContextHolder<String, ReadContext> contextHolder() {
+        return readParam.getContextHolder();
     }
 
     @Override
     protected String key() {
-        return key;
+        return readParam.getKey();
     }
 
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
         boolean isHead = context.readSheetHolder().getHeadRowNumber() - 1 == context.readRowHolder().getRowIndex();
-        if (isHead && excelReadFlowControl.isCheckHead()) {
+        if (isHead && readParam.isCheckHead()) {
             log.info("Head data: {}", JsonUtils.toJsonString(headMap));
 
             Map<Integer, String> predefinedHeadMap = new HashMap<>(headMap.size());

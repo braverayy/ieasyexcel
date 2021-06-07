@@ -1,7 +1,6 @@
 package com.leslie.framework.ieasyexcel.read;
 
 import com.alibaba.excel.context.AnalysisContext;
-import com.leslie.framework.ieasyexcel.read.metadata.ExcelReadValidation;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

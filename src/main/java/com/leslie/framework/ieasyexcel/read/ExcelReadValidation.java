@@ -1,4 +1,4 @@
-package com.leslie.framework.ieasyexcel.read.metadata;
+package com.leslie.framework.ieasyexcel.read;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

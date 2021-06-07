@@ -6,7 +6,6 @@ import com.alibaba.excel.read.metadata.holder.ReadRowHolder;
 import com.alibaba.excel.read.metadata.holder.ReadSheetHolder;
 import com.leslie.framework.ieasyexcel.context.ReadContext;
 import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
-import com.leslie.framework.ieasyexcel.context.holder.ContextHolderBuilder;
 
 /**
  * @author leslie
@@ -14,21 +13,11 @@ import com.leslie.framework.ieasyexcel.context.holder.ContextHolderBuilder;
  */
 public abstract class AbstractExcelReadListener<T> extends AnalysisEventListener<T> {
 
-    @Override
-    public void invoke(T data, AnalysisContext context) {
-        setReadContext(context);
-    }
-
-    @Override
-    public void doAfterAllAnalysed(AnalysisContext context) {
-        setReadContext(context);
-    }
+    protected abstract ContextHolder<String, ReadContext> contextHolder();
 
     protected abstract String key();
 
     protected void setReadContext(AnalysisContext context) {
-        ContextHolder<String, ReadContext> readContextHolder = ContextHolderBuilder.<ReadContext>create().build();
-
         ReadRowHolder readRowHolder = context.readRowHolder();
         ReadSheetHolder readSheetHolder = context.readSheetHolder();
 
@@ -38,7 +27,6 @@ public abstract class AbstractExcelReadListener<T> extends AnalysisEventListener
                 .rowTotal(readSheetHolder.getApproximateTotalRowNumber())
                 .rowIndex(readRowHolder.getRowIndex())
                 .build();
-
-        readContextHolder.setContext(key(), readContext);
+        contextHolder().setContext(key(), readContext);
     }
 }
