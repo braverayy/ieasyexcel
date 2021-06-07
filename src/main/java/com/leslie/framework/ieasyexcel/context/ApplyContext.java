@@ -1,9 +1,6 @@
 package com.leslie.framework.ieasyexcel.context;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author leslie
@@ -11,20 +8,14 @@ import lombok.ToString;
  */
 @Getter
 @Setter
+@Builder
 @ToString
 @EqualsAndHashCode
 public class ApplyContext extends Context {
 
-    private Object currentData;
+    private Object data;
 
     private Long total;
 
-    /**
-     * 从0开始
-     */
     private Long index;
-
-    public boolean isLast() {
-        return total - index == 1;
-    }
 }

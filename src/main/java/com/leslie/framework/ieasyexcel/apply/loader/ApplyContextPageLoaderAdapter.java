@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author leslie
@@ -18,63 +20,66 @@ public class ApplyContextPageLoaderAdapter<T> implements ApplyContextLoader {
 
     private int pageSize = 50;
 
-    private final ContextHolder<String, ApplyContext> applyContextHolder;
+    private ContextHolder<String, ApplyContext> contextHolder;
 
     private final ApplyContextPageLoader<T> pageContextLoader;
 
-    public ApplyContextPageLoaderAdapter(ContextHolder<String, ApplyContext> applyContextHolder,
-                                         ApplyContextPageLoader<T> pageContextLoader) {
-        this.applyContextHolder = applyContextHolder;
+    public ApplyContextPageLoaderAdapter(ApplyContextPageLoader<T> pageContextLoader) {
         this.pageContextLoader = pageContextLoader;
     }
 
-    public ApplyContextPageLoaderAdapter(int pageSize,
-                                         ContextHolder<String, ApplyContext> applyContextHolder,
-                                         ApplyContextPageLoader<T> pageContextLoader) {
+    public ApplyContextPageLoaderAdapter(int pageSize, ApplyContextPageLoader<T> pageContextLoader) {
         this.pageSize = pageSize;
-        this.applyContextHolder = applyContextHolder;
         this.pageContextLoader = pageContextLoader;
+    }
+
+    public void setContextHolder(ContextHolder<String, ApplyContext> contextHolder) {
+        this.contextHolder = contextHolder;
     }
 
     @Override
     public ApplyContext next(String key) {
-        ApplyContext applyContext = applyContextHolder.getContext(key).orElse(null);
+        Objects.requireNonNull(contextHolder, "ContextHolder must not be null!");
 
-        if (applyContext == null) {
+        Optional<ApplyContext> contextOp = contextHolder.getContext(key);
 
-            page = pageContextLoader.load(PageRequest.of(0, pageSize));
+        contextOp.ifPresent(context -> {
+            Long index = context.getIndex();
 
-            applyContext = new ApplyContext();
-            applyContext.setCurrentData(page.getContent().isEmpty() ? null : page.getContent().get(0));
-            applyContext.setTotal(page.getTotalElements());
-            applyContext.setIndex(0L);
-
-            applyContextHolder.setContext(key, applyContext);
-        } else {
-
-            long index = applyContext.getIndex();
             int indexOfElements = (int) (index - (page.getNumber() * page.getSize()));
 
-            List<T> content = page.getContent();
+            List<T> dataList = page.getContent();
 
-            if (applyContext.isLast()) {
+            // load the next data on the slice
+            if (indexOfElements <= dataList.size() - 1) {
 
-                applyContext.setIndex(index + 1);
-                return applyContext;
+                context.setIndex(index + 1);
+                context.setTotal(page.getTotalElements());
+                context.setData(dataList.get(indexOfElements + 1));
 
-            } else if (indexOfElements < content.size() - 1) {
+                // load next page
+            } else if (page.hasNext()) {
 
-                applyContext.setCurrentData(content.get(indexOfElements + 1));
-
-            } else {
-
-                // 下一页
                 page = pageContextLoader.load(page.nextPageable());
-                applyContext.setCurrentData(page.getContent().isEmpty() ? null : page.getContent().get(0));
-            }
 
-            applyContext.setIndex(index + 1);
-        }
-        return applyContext;
+                context.setIndex(index + 1);
+                context.setTotal(page.getTotalElements());
+                context.setData(getFirstElement(page));
+            }
+        });
+        return contextOp.orElseGet(this::firstLoad);
+    }
+
+    public T getFirstElement(Page<T> page) {
+        return page.getContent().isEmpty() ? null : page.getContent().get(0);
+    }
+
+    public ApplyContext firstLoad() {
+        page = pageContextLoader.load(PageRequest.of(0, pageSize));
+        return ApplyContext.builder()
+                .data(getFirstElement(page))
+                .index(0L)
+                .total(page.getTotalElements())
+                .build();
     }
 }

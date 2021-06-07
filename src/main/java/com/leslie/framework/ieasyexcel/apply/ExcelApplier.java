@@ -6,7 +6,7 @@ import com.leslie.framework.ieasyexcel.context.ApplyContext;
  * @author leslie
  * @date 2021/3/22
  */
-public interface ExcelApplier<T> {
+public interface ExcelApplier {
 
-    void apply(T t, ApplyContext context);
+    void apply(Object data, ApplyContext context);
 }

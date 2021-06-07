@@ -18,8 +18,7 @@ public class ReadContext extends Context {
     private String sheetName;
 
     private Integer rowIndex;
-    /**
-     * data may be inaccurate
-     */
+
+    // data may be inaccurate
     private Integer rowTotal;
 }
