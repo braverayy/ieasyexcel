@@ -10,11 +10,11 @@ import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
  * @author leslie
  * @date 2021/3/22
  */
-public class ApplyExecutor<T> {
+public class ExcelApplyExecutor<T> {
 
     private final ExcelApplyParam applyParam;
 
-    public ApplyExecutor(ExcelApplyParam applyParam) {
+    public ExcelApplyExecutor(ExcelApplyParam applyParam) {
         this.applyParam = applyParam;
     }
 
@@ -46,7 +46,7 @@ public class ApplyExecutor<T> {
         });
     }
 
-    public void doExecute(Runnable runnable) {
+    private void doExecute(Runnable runnable) {
         ExcelApplyHandler applyHandler = applyParam.getExcelApplyHandler();
         if (applyHandler != null) {
             applyHandler.beforeApply();

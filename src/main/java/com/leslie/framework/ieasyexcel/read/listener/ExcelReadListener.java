@@ -3,8 +3,8 @@ package com.leslie.framework.ieasyexcel.read.listener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.leslie.framework.ieasyexcel.context.ReadContext;
 import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
+import com.leslie.framework.ieasyexcel.read.BasedReadBean;
 import com.leslie.framework.ieasyexcel.read.ExcelReadParam;
-import com.leslie.framework.ieasyexcel.read.ExcelReadValidation;
 import com.leslie.framework.ieasyexcel.read.ExcelReader;
 import com.leslie.framework.ieasyexcel.support.ExcelCommonException;
 import com.leslie.framework.ieasyexcel.util.ExcelHeadUtils;
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 @Slf4j
-public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractExcelReadListener<T> {
+public class ExcelReadListener<T extends BasedReadBean> extends AbstractExcelReadListener<T> {
 
     protected final ExcelReadParam readParam;
 
@@ -37,7 +37,7 @@ public class ExcelReadListener<T extends ExcelReadValidation> extends AbstractEx
         log.info("Row data: {}", JsonUtils.toJsonString(data));
 
         ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
-        ExcelReadValidation validation = new ExcelReadValidation();
+        BasedReadBean validation = new BasedReadBean();
 
         // pre-check
         if (readParam.isCheckCacheRepeat() && dataCache.contains(data)) {

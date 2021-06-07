@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ExcelReadValidation {
+public class BasedReadBean {
 
     @JsonIgnore
     private Boolean available;

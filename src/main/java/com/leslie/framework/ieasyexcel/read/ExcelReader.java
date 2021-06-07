@@ -19,8 +19,8 @@ public interface ExcelReader<T> {
 
     void read(List<T> excelDataList, AnalysisContext context);
 
-    default ExcelReadValidation check(T excelData) {
-        ExcelReadValidation validation = new ExcelReadValidation();
+    default BasedReadBean check(T excelData) {
+        BasedReadBean validation = new BasedReadBean();
         Set<ConstraintViolation<T>> validate = VALIDATOR.validate(excelData);
         if (validate != null && !validate.isEmpty()) {
             List<String> failureMsg = validate.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
