@@ -17,8 +17,14 @@ public class ReadContext extends Context {
 
     private String sheetName;
 
+    private Object rowData;
+
     private Integer rowIndex;
 
-    // data may be inaccurate
+    /**
+     * total may be inaccurate
+     *
+     * {@see com.alibaba.excel.read.metadata.holder.ReadSheetHolder#approximateTotalRowNumber}
+     */
     private Integer rowTotal;
 }

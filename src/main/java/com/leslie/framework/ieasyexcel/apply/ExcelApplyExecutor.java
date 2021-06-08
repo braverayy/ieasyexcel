@@ -5,11 +5,13 @@ import com.leslie.framework.ieasyexcel.apply.loader.ApplyContextLoader;
 import com.leslie.framework.ieasyexcel.apply.loader.ApplyContextPageLoaderAdapter;
 import com.leslie.framework.ieasyexcel.context.ApplyContext;
 import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
+import lombok.Getter;
 
 /**
  * @author leslie
  * @date 2021/3/22
  */
+@Getter
 public class ExcelApplyExecutor<T> {
 
     private final ExcelApplyParam applyParam;

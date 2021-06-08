@@ -3,12 +3,13 @@ package com.leslie.framework.ieasyexcel.read.listener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.leslie.framework.ieasyexcel.context.ReadContext;
 import com.leslie.framework.ieasyexcel.context.holder.ContextHolder;
-import com.leslie.framework.ieasyexcel.read.BasedReadBean;
+import com.leslie.framework.ieasyexcel.read.BasedExcelReadModel;
 import com.leslie.framework.ieasyexcel.read.ExcelReadParam;
 import com.leslie.framework.ieasyexcel.read.ExcelReader;
 import com.leslie.framework.ieasyexcel.support.ExcelCommonException;
 import com.leslie.framework.ieasyexcel.util.ExcelHeadUtils;
 import com.leslie.framework.ieasyexcel.util.JsonUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -21,10 +22,11 @@ import java.util.Map;
  * @date 2021/3/22
  */
 @SuppressWarnings("unchecked")
+@Getter
 @Slf4j
-public class ExcelReadListener<T extends BasedReadBean> extends AbstractExcelReadListener<T> {
+public class ExcelReadListener<T extends BasedExcelReadModel> extends AbstractExcelReadListener<T> {
 
-    protected final ExcelReadParam readParam;
+    private final ExcelReadParam readParam;
 
     private final List<T> dataCache = new ArrayList<>();
 
@@ -35,15 +37,16 @@ public class ExcelReadListener<T extends BasedReadBean> extends AbstractExcelRea
     @Override
     public void invoke(T data, AnalysisContext context) {
         log.info("Row data: {}", JsonUtils.toJsonString(data));
+        setReadContext(context);
 
         ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
-        BasedReadBean validation = new BasedReadBean();
+        BasedExcelReadModel validation = new BasedExcelReadModel();
 
         // pre-check
         if (readParam.isCheckCacheRepeat() && dataCache.contains(data)) {
 
             validation.setAvailable(false);
-            validation.setMsg("数据重复");
+            validation.setMsg(BasedExcelReadModel.DATA_REPEAT);
 
         } else if (readParam.isPreCheck()) {
 
@@ -55,20 +58,17 @@ public class ExcelReadListener<T extends BasedReadBean> extends AbstractExcelRea
         // add to the cache, reach the specified number to save
         dataCache.add(data);
         if (dataCache.size() >= readParam.getBatchCount()) {
-            readAndSetContext(dataCache, context);
+            excelReader.read(dataCache, context);
             dataCache.clear();
         }
     }
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        readAndSetContext(dataCache, context);
-    }
-
-    protected void readAndSetContext(List<T> excelDataList, AnalysisContext context) {
-        setReadContext(context);
-        ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
-        excelReader.read(excelDataList, context);
+        if (!dataCache.isEmpty()) {
+            ExcelReader<T> excelReader = (ExcelReader<T>) readParam.getExcelReader();
+            excelReader.read(dataCache, context);
+        }
     }
 
     @Override

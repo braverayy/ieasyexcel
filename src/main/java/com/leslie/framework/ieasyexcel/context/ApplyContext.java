@@ -15,7 +15,7 @@ public class ApplyContext extends Context {
 
     private Object data;
 
-    private Long total;
-
     private Long index;
+
+    private Long total;
 }

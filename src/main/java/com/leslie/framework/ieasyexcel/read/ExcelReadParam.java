@@ -59,6 +59,9 @@ public class ExcelReadParam {
         private int batchCount = 100;
         private boolean preCheck = true;
         private boolean checkHead = true;
+        /**
+         * Equals And HashCode method must be rewritten
+         */
         private boolean checkCacheRepeat = true;
 
         ExcelReadParamBuilder() {

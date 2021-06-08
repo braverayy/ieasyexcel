@@ -12,7 +12,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BasedReadBean {
+public class BasedExcelReadModel {
+
+    public static final String DATA_REPEAT = "DATA_REPEAT";
 
     @JsonIgnore
     private Boolean available;
