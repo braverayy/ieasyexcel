@@ -5,7 +5,7 @@
 
 两段式导入入库方案：通过 Excel 导入数据到业务表时，并不会直接的导入业务表。而是通过一个临时表来存储，再将临时表中数据经过清洗、转换等步骤保存至业务表
 
-## 优点
+## 功能
 
 - 基于 `Bean Validator` 注解验证 Excel 字段的正确性 [Model](https://github.com/leslie-gl/ieasyexcel-examples/blob/master/src/main/java/com/leslie/framework/ieasyexcel/example/entity/excel/CityExcel.java)
 - 提供了 [ReadContext](https://github.com/leslie-gl/ieasyexcel/blob/master/src/main/java/com/leslie/framework/ieasyexcel/context/ReadContext.java)、[ApplyContext](https://github.com/leslie-gl/ieasyexcel/blob/master/src/main/java/com/leslie/framework/ieasyexcel/context/ApplyContext.java)，用于获取读 Excel 和 Excel 入库时的上下文
