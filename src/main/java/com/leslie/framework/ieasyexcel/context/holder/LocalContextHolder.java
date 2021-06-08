@@ -14,9 +14,8 @@ import java.util.Optional;
  */
 public class LocalContextHolder<V extends Context> implements ContextHolder<String, V> {
 
-    public static Cache<@NonNull String, @NonNull Context> cache;
+    public Cache<@NonNull String, @NonNull V> cache;
 
-    @SuppressWarnings("unchecked")
     @Override
     public Optional<V> getContext(String key) {
         return cache == null ? Optional.empty() : Optional.ofNullable((V) cache.getIfPresent(key));
