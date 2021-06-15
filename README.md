@@ -37,7 +37,7 @@ EasyExcel.read(inputStream, EXCEL_BIZ_TYPE.CITY.excelClazz, readListener).sheet(
 ### Excel 入库
 
 ```java
-ApplyContextLoader contextLoader = new ApplyContextPageLoaderAdapter<>(pageable -> {
+ApplyContextLoader contextLoader = ApplyContextPageLoaderAdapter.getLoader(pageable -> {
     // 分页查询临时表数据
 });
 // 构建 Excel 入库参数

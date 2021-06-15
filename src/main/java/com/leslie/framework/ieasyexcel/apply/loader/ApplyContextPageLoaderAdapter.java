@@ -18,17 +18,20 @@ public class ApplyContextPageLoaderAdapter<T> implements ApplyContextLoader {
 
     private Page<T> page;
 
-    private int pageSize = 50;
+    private final int pageSize;
+    private final ApplyContextPageLoader<T> pageContextLoader;
 
     private ContextHolder<String, ApplyContext> contextHolder;
 
-    private final ApplyContextPageLoader<T> pageContextLoader;
-
-    public ApplyContextPageLoaderAdapter(ApplyContextPageLoader<T> pageContextLoader) {
-        this.pageContextLoader = pageContextLoader;
+    public static <T> ApplyContextPageLoaderAdapter<T> getLoader(ApplyContextPageLoader<T> pageContextLoader) {
+        return new ApplyContextPageLoaderAdapter<>(50, pageContextLoader);
     }
 
-    public ApplyContextPageLoaderAdapter(int pageSize, ApplyContextPageLoader<T> pageContextLoader) {
+    public static <T> ApplyContextPageLoaderAdapter<T> getLoader(int pageSize, ApplyContextPageLoader<T> pageContextLoader) {
+        return new ApplyContextPageLoaderAdapter<>(pageSize, pageContextLoader);
+    }
+
+    private ApplyContextPageLoaderAdapter(int pageSize, ApplyContextPageLoader<T> pageContextLoader) {
         this.pageSize = pageSize;
         this.pageContextLoader = pageContextLoader;
     }
