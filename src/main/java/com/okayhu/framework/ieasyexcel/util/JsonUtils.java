@@ -52,6 +52,10 @@ public class JsonUtils {
         return toObject(jsonString, listType);
     }
 
+    public static Map<String, Object> toMap(String jsonString) {
+        return toMap(jsonString, String.class, Object.class);
+    }
+
     public static <K, V> Map<K, V> toMap(String jsonString, Class<K> keyClazz, Class<V> valueClazz) {
         if (keyClazz == null || valueClazz == null)
             throw new IllegalArgumentException("KeyClazz and valueClazz must not be null");
