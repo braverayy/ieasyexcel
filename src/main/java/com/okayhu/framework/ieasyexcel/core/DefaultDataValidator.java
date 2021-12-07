@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
  * @author okayhu
  * @date 2021/12/6
  */
-public class DefaultExcelDataValidator<T> extends AbstractExcelDataValidator<T> {
+public class DefaultDataValidator<T> extends AbstractDataValidator<T> {
 
-    public DefaultExcelDataValidator() {
+    public DefaultDataValidator() {
     }
 
-    public DefaultExcelDataValidator(Validator validator) {
+    public DefaultDataValidator(Validator validator) {
         super(validator);
     }
 

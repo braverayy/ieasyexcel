@@ -1,6 +1,6 @@
 package com.okayhu.framework.ieasyexcel.readv2;
 
-import com.okayhu.framework.ieasyexcel.core.ExcelDataValidator;
+import com.okayhu.framework.ieasyexcel.core.DataValidator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +17,5 @@ public class ExcelReadParam<T> {
     private boolean checkHead;
     private boolean checkCacheRepeat;
     private ExcelReader<T> reader;
-    private ExcelDataValidator<T> validator;
+    private DataValidator<T> validator;
 }

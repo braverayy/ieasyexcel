@@ -9,15 +9,15 @@ import java.util.Set;
  * @author okayhu
  * @date 2021/12/6
  */
-public abstract class AbstractExcelDataValidator<T> implements ExcelDataValidator<T> {
+public abstract class AbstractDataValidator<T> implements DataValidator<T> {
 
     protected final Validator validator;
 
-    public AbstractExcelDataValidator() {
+    public AbstractDataValidator() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    public AbstractExcelDataValidator(Validator validator) {
+    public AbstractDataValidator(Validator validator) {
         this.validator = validator;
     }
 
@@ -27,5 +27,11 @@ public abstract class AbstractExcelDataValidator<T> implements ExcelDataValidato
         return format(violations);
     }
 
-    public abstract ValidationResult format(Set<ConstraintViolation<T>> violations);
+    /**
+     * Format violation info
+     *
+     * @param violations violation info
+     * @return validation result
+     */
+    protected abstract ValidationResult format(Set<ConstraintViolation<T>> violations);
 }

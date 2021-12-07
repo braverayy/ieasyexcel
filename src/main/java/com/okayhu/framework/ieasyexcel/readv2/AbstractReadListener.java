@@ -4,7 +4,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.util.ConverterUtils;
-import com.okayhu.framework.ieasyexcel.core.ExcelDataValidator;
+import com.okayhu.framework.ieasyexcel.core.DataValidator;
 import com.okayhu.framework.ieasyexcel.core.ValidationResult;
 import com.okayhu.framework.ieasyexcel.util.ExcelHeadUtils;
 import com.okayhu.framework.ieasyexcel.util.JsonUtils;
@@ -58,7 +58,7 @@ public abstract class AbstractReadListener<T> implements ReadListener<T> {
     }
 
     private ValidationResult validate(T rowData) {
-        ExcelDataValidator<T> validator = readParam.getValidator();
+        DataValidator<T> validator = readParam.getValidator();
         return validator == null ? ValidationResult.success() : validator.validate(rowData);
     }
 }
