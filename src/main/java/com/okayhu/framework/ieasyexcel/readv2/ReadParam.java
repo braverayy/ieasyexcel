@@ -12,10 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ExcelReadParam<T> {
+public class ReadParam<T> {
 
     private boolean checkHead;
     private boolean checkCacheRepeat;
-    private ExcelReader<T> reader;
     private DataValidator<T> validator;
 }

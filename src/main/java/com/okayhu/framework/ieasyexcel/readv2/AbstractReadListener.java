@@ -6,6 +6,7 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.util.ConverterUtils;
 import com.okayhu.framework.ieasyexcel.core.DataValidator;
 import com.okayhu.framework.ieasyexcel.core.ValidationResult;
+import com.okayhu.framework.ieasyexcel.support.ExcelHeadParseException;
 import com.okayhu.framework.ieasyexcel.util.ExcelHeadUtils;
 import com.okayhu.framework.ieasyexcel.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,9 @@ import java.util.Map;
 @Slf4j
 public abstract class AbstractReadListener<T> implements ReadListener<T> {
 
-    private final ExcelReadParam<T> readParam;
+    private final ReadParam<T> readParam;
 
-    public AbstractReadListener(ExcelReadParam<T> readParam) {
+    public AbstractReadListener(ReadParam<T> readParam) {
         this.readParam = readParam;
     }
 
@@ -33,9 +34,15 @@ public abstract class AbstractReadListener<T> implements ReadListener<T> {
 
         // validate row data
         ValidationResult validationResult = validate(rowData);
+        doInvoke(rowData, validationResult, analysisContext);
+    }
 
-        // do read
-        readParam.getReader().read(rowData, validationResult, analysisContext);
+    protected abstract void doInvoke(T rowData, ValidationResult validationResult, AnalysisContext analysisContext);
+
+
+    @Override
+    public void doAfterAllAnalysed(AnalysisContext context) {
+        // nothing
     }
 
     @Override
